@@ -1,0 +1,3 @@
+# ignore database
+#including >1k8 wav&txt files
+./data/database/
