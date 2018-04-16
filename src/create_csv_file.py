@@ -3,7 +3,7 @@ import csv
 
 
 input_directory = './data/database/DS3/'
-output_directory = './data/csv/'
+output_directory = './data/csv/initial_csv'
 output_file = 'DS3global.csv'
 output = output_directory + output_file
 out_file = open(output, "w")

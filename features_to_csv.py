@@ -7,7 +7,7 @@ from essentia.standard import *
 # init folders to work on
 input_data = './data/database/DS1/'
 info_file = './data/csv/DS1global.csv'
-output_file = './data/csv/DS1features.csv'
+output_file = './data/csv/mfccs_csv/DS1features.csv'
 
 in_info = open(info_file, "r")
 out_file = open(output_file, "w")
