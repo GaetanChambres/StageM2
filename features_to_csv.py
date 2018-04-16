@@ -5,30 +5,33 @@ import essentia.standard as std
 from essentia.standard import *
 
 # init folders to work on
-input_data = './data/database/DS1/'
-info_file = './data/csv/DS1global.csv'
-output_file = './data/csv/mfccs_csv/DS1features.csv'
+input_data = './data/database/DS3/'
+info_file = './data/csv/initial_csv/DS3global.csv'
+output_file = './data/csv/mfccs_csv/DS3features.csv'
+
+with open(info_file) as f:
+    for i, l in enumerate(f):
+        pass
+        tmp = i + 1
+    nb_lines = tmp
 
 in_info = open(info_file, "r")
 out_file = open(output_file, "w")
-
+cpt = 0
 # read global csv
 # 1 line is 1 respiration cycle in 1 record
 # we want to compute features for each ones
 info = in_info.readline() #line 1
 while info:
+    cpt+=1
     #saving csv info of the line in some variables
     filename,start_time,end_time,crackle,wheezle = info.split(',')
-    start_time = float(start_time)
-    end_time = float(end_time)
-    crackle = int(crackle)
-    wheezle = int(wheezle)
 
     # starting the  features computation
 
     tmpfile = input_data+filename+".wav"
     #print tmpfile
-    loader = essentia.standard.EasyLoader(filename=tmpfile, startTime=start_time, endTime=end_time)
+    loader = essentia.standard.EasyLoader(filename=tmpfile, startTime=float(start_time), endTime=float(end_time))
     audio = loader()
 
     # init essentia algorithms
@@ -54,21 +57,23 @@ while info:
     melbands = essentia.array(melbands).T
     melbands_log = essentia.array(melbands_log).T
 
-    # and plot
-    # plt.imshow(melbands[:,:], aspect = 'auto', origin='lower', interpolation='none')
-    # plt.title("Mel band spectral energies in frames")
-    # plt.show()
-    #
-    # plt.imshow(melbands_log[:,:], aspect = 'auto', origin='lower', interpolation='none')
-    # plt.title("Log-normalized mel band spectral energies in frames")
-    # plt.show()
-    #
-    # plt.imshow(mfccs[1:,:], aspect='auto', origin='lower', interpolation='none')
-    # plt.title("MFCCs in frames")
-    # plt.show()
 
-    #print mfccs
+    # write mfccs file
+    out_file.write(filename + "," + start_time + "," + end_time + ",")
 
+    string_mfcc = ""
+    for t in range(len(mfcc_coeffs)):
+        string_mfcc += str(mfcc_coeffs[t]) + ","
 
-    break
+    #print string_mfcc
+
+    for t in range(len(mfcc_bands)):
+        string_mfcc += str(mfcc_bands[t]) + ","
+
+    string_mfcc += crackle + "," + wheezle
+
+    print string_mfcc
+    out_file.write(string_mfcc)
+
+    print str(cpt) + " over " + str(nb_lines)
     info = in_info.readline()
