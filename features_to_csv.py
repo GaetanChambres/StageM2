@@ -70,9 +70,8 @@ while info:
     for t in range(len(mfcc_bands)):
         string_mfcc += str(mfcc_bands[t]) + ","
 
-    string_mfcc += crackle + "," + wheezle
+    string_mfcc = string_mfcc[:-1]
 
-    print string_mfcc
     out_file.write(string_mfcc)
 
     print str(cpt) + " over " + str(nb_lines)
