@@ -71,8 +71,10 @@ while info:
         string_mfcc += str(mfcc_bands[t]) + ","
 
     string_mfcc = string_mfcc[:-1]
+    #print string_mfcc
 
     out_file.write(string_mfcc)
+    out_file.write("\n")
 
     print str(cpt) + " over " + str(nb_lines)
     info = in_info.readline()
