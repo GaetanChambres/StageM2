@@ -58,11 +58,12 @@ test_fileinfo.columns = cols_labels_info
 tmp_mfcc = tmp
 for i in range(1,14):
     tmp_mfcc += "coef"+str(i)+","
-for j in range(1,41):
-    tmp_mfcc += "bands"+str(j)+","
+# for j in range(1,41):
+#     tmp_mfcc += "bands"+str(j)+","
 tmp_mfcc = tmp_mfcc[:-1]
 cols_labels_mfcc = tmp_mfcc.split(",")
-#print cols_labels_mfcc
+print(cols_labels_mfcc)
+print(train_mfcc.shape)
 train_mfcc.columns = cols_labels_mfcc
 train_mfcc_2.columns = cols_labels_mfcc
 test_mfcc.columns = cols_labels_mfcc
@@ -93,19 +94,19 @@ wheezles_train = train_fileinfo[[col for col in train_fileinfo.columns if col!='
 wheezles_train_2 = train_fileinfo_2[[col for col in train_fileinfo_2.columns if col!='filename' and col!='startTime' and col!= 'endTime' and col!='crackles']]
 combined_wheezles_train = pd.concat([wheezles_train, wheezles_train_2],axis=0,ignore_index=True)
 
-# print("TRAIN inputs")
-# print("shape of data input 1:",dataset_train_mfcc.shape)
-# print("shape of data input 2:",dataset_train_mfcc_2.shape)
-# print("shape of combined data input:",combined_train_mfcc.shape)
-# print()
-# print("shape of crackles results 1:",crackles_train.shape)
-# print("shape of crackles results 2:",crackles_train_2.shape)
-# print("shape of combined crackles results:",combined_crackles_train.shape)
-# print()
-# print("shape of wheezles results 1:",wheezles_train.shape)
-# print("shape of wheezles results 2:",wheezles_train_2.shape)
-# print("shape of combined wheezles results:",combined_wheezles_train.shape)
-# print()
+print("TRAIN inputs")
+print("shape of data input 1:",dataset_train_mfcc)
+print("shape of data input 2:",dataset_train_mfcc_2.shape)
+print("shape of combined data input:",combined_train_mfcc.shape)
+print()
+print("shape of crackles results 1:",crackles_train.shape)
+print("shape of crackles results 2:",crackles_train_2.shape)
+print("shape of combined crackles results:",combined_crackles_train.shape)
+print()
+print("shape of wheezles results 1:",wheezles_train.shape)
+print("shape of wheezles results 2:",wheezles_train_2.shape)
+print("shape of combined wheezles results:",combined_wheezles_train.shape)
+print()
 
 #####   test    #####
 dataset_test_mfcc = test_mfcc[[col for col in test_mfcc.columns if col!='filename' and col!='startTime' and col!= 'endTime']]

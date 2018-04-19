@@ -5,9 +5,9 @@ import essentia.standard as std
 from essentia.standard import *
 
 # init folders to work on
-input_data = './data/database/DS3/'
-info_file = './data/csv/initial_csv/DS3global.csv'
-output_file = './data/csv/mfccs_csv/DS3features.csv'
+input_data = './data/database/DS1/'
+info_file = './data/csv/initial_csv/DS1global.csv'
+output_file = './data/csv/mfccs_csv/DS1features.csv'
 
 with open(info_file) as f:
     for i, l in enumerate(f):
@@ -65,16 +65,16 @@ while info:
     for t in range(len(mfcc_coeffs)):
         string_mfcc += str(mfcc_coeffs[t]) + ","
 
-    #print string_mfcc
+    print string_mfcc
 
-    for t in range(len(mfcc_bands)):
-        string_mfcc += str(mfcc_bands[t]) + ","
-
-    string_mfcc = string_mfcc[:-1]
-    #print string_mfcc
+    # for t in range(len(mfcc_bands)):
+    #     string_mfcc += str(mfcc_bands[t]) + ","
+    #
+    # string_mfcc = string_mfcc[:-1]
+    # #print string_mfcc
+    #
 
     out_file.write(string_mfcc)
     out_file.write("\n")
-
     print str(cpt) + " over " + str(nb_lines)
     info = in_info.readline()
