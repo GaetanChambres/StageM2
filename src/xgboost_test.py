@@ -9,29 +9,29 @@ from sklearn.metrics import precision_score
 #####     Open Files     #####
 ##############################
 
-DS1_features = pd.read_csv('./data/csv/mfccs_csv/DS1features.csv', header=None)
+DS1_mfcc = pd.read_csv('./data/csv/mfccs_csv/DS1mfcc.csv', header=None)
 DS1_fileinfo = pd.read_csv('./data/csv/initial_csv/DS1global.csv', header=None)
 
-DS2_features = pd.read_csv('./data/csv/mfccs_csv/DS2features.csv', header=None)
+DS2_mfcc = pd.read_csv('./data/csv/mfccs_csv/DS2mfcc.csv', header=None)
 DS2_fileinfo = pd.read_csv('./data/csv/initial_csv/DS2global.csv', header=None)
 
-DS3_features = pd.read_csv('./data/csv/mfccs_csv/DS3features.csv', header=None)
+DS3_mfcc = pd.read_csv('./data/csv/mfccs_csv/DS3mfcc.csv', header=None)
 DS3_fileinfo = pd.read_csv('./data/csv/initial_csv/DS3global.csv', header=None)
 
 #####   train   #####
-train_mfcc = DS2_features
-train_fileinfo = DS2_fileinfo
+train_mfcc = DS1_mfcc
+train_fileinfo = DS1_fileinfo
 
-train_mfcc_2 = DS3_features
-train_fileinfo_2 = DS3_fileinfo
+train_mfcc_2 = DS2_mfcc
+train_fileinfo_2 = DS2_fileinfo
 
-info_string_train = "trained on DS2 and DS3"
+info_string_train = "trained on DS1 and DS2"
 
 #####   test    #####
-test_mfcc = DS1_features
-test_fileinfo = DS1_fileinfo
+test_mfcc = DS3_mfcc
+test_fileinfo = DS3_fileinfo
 
-info_string_test = "tested on DS1"
+info_string_test = "tested on DS3"
 
 ##############################
 #  Naming cols in csv files  #
@@ -62,8 +62,8 @@ for i in range(1,14):
 #     tmp_mfcc += "bands"+str(j)+","
 tmp_mfcc = tmp_mfcc[:-1]
 cols_labels_mfcc = tmp_mfcc.split(",")
-print(cols_labels_mfcc)
-print(train_mfcc.shape)
+# print(cols_labels_mfcc)
+# print(train_mfcc.shape)
 train_mfcc.columns = cols_labels_mfcc
 train_mfcc_2.columns = cols_labels_mfcc
 test_mfcc.columns = cols_labels_mfcc
@@ -95,7 +95,7 @@ wheezles_train_2 = train_fileinfo_2[[col for col in train_fileinfo_2.columns if 
 combined_wheezles_train = pd.concat([wheezles_train, wheezles_train_2],axis=0,ignore_index=True)
 
 print("TRAIN inputs")
-print("shape of data input 1:",dataset_train_mfcc)
+print("shape of data input 1:",dataset_train_mfcc.shape)
 print("shape of data input 2:",dataset_train_mfcc_2.shape)
 print("shape of combined data input:",combined_train_mfcc.shape)
 print()
