@@ -5,9 +5,9 @@ import essentia.standard as std
 from essentia.standard import *
 
 # init folders to work on
-input_data = './data/database/DS1/'
-info_file = './data/csv/initial_csv/DS1global.csv'
-output_file = './data/csv/mfccs_csv/DS1features.csv'
+input_data = './data/database/DS3Full/'
+info_file = './data/csv/initial_csv_v2/DS3globalV2.csv'
+output_file = './data/csv/mfccs_csv/DS3globalfeatures.csv'
 
 with open(info_file) as f:
     for i, l in enumerate(f):
@@ -25,11 +25,11 @@ info = in_info.readline() #line 1
 while info:
     cpt+=1
     #saving csv info of the line in some variables
-    filename,start_time,end_time,crackle,wheezle = info.split(',')
+    patient_number,record_index,body_area,record_tool,channel,start_time,end_time,crackle,wheezle = info.split(',')
 
     # starting the  features computation
 
-    tmpfile = input_data+filename+".wav"
+    tmpfile = input_data+patient_number+"_"+record_index+"_"+body_area+"_"+channel+"_"+record_tool+".wav"
     #print tmpfile
     loader = essentia.standard.EasyLoader(filename=tmpfile, startTime=float(start_time), endTime=float(end_time))
     audio = loader()
@@ -58,14 +58,11 @@ while info:
     melbands_log = essentia.array(melbands_log).T
 
 
-    # write mfccs file
-    out_file.write(filename + "," + start_time + "," + end_time + ",")
 
     string_mfcc = ""
     for t in range(len(mfcc_coeffs)):
         string_mfcc += str(mfcc_coeffs[t]) + ","
 
-    print string_mfcc
 
     # for t in range(len(mfcc_bands)):
     #     string_mfcc += str(mfcc_bands[t]) + ","
@@ -74,7 +71,9 @@ while info:
     # #print string_mfcc
     #
 
-    out_file.write(string_mfcc)
-    out_file.write("\n")
+    # write mfccs file
+    out_file.write(patient_number + "," + record_index + "," + body_area + "," + channel + "," + record_tool + "," + start_time + "," + end_time + "," + crackle + "," + wheezle.rstrip('\n') + "," + string_mfcc + "\n")
+
+    # out_file.write("\n")
     print str(cpt) + " over " + str(nb_lines)
     info = in_info.readline()
