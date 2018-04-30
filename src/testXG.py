@@ -18,16 +18,31 @@ DS1 = "./data/csv/mfccs_csv/DS1globalfeatures.csv"
 DS2 = './data/csv/mfccs_csv/DS2globalfeatures.csv'
 DS3 = './data/csv/mfccs_csv/DS3globalfeatures.csv'
 
+# train1_dataset = loadtxt(DS1, delimiter=",")
+# train2_dataset = loadtxt(DS2, delimiter=",")
+# test_dataset = loadtxt(DS3, delimiter=",")
+# print("trained on DS1 & DS2 then tested on DS3")
+
 train1_dataset = loadtxt(DS2, delimiter=",")
 train2_dataset = loadtxt(DS3, delimiter=",")
-
 test_dataset = loadtxt(DS1, delimiter=",")
-
 print("trained on DS2 & DS3 then tested on DS1")
+
+# train1_dataset = loadtxt(DS1, delimiter=",")
+# train2_dataset = loadtxt(DS3, delimiter=",")
+# test_dataset = loadtxt(DS2, delimiter=",")
+# print("trained on DS1 & DS3 then tested on DS2")
 
 combined_dataset = append(train1_dataset,train2_dataset,axis=0)
 # print("combined shape")
 # print(combined_dataset.shape)
+
+# with open(test_dataset, 'r') as f:
+#     for i, l in enumerate(f):
+#         pass
+#         tmp = i + 1
+#     nb_lines = tmp
+nb_lines = len(test_dataset)
 
 # print(dataset.shape)
 info = combined_dataset[:,:3]
@@ -66,8 +81,9 @@ predictions = [round(value) for value in y_pred]
 
 # evaluate predictions
 accuracy = accuracy_score(crackles_test, predictions)
-
+accuracy_nb = accuracy_score(wheezles_test, predictions,normalize=False)
 print("Accuracy: %.2f%%" % (accuracy * 100.0))
+print("Nb correct estimation : %.2d" % (accuracy_nb) + " over %.2d" % (nb_lines))
 
 #--------------------------------
 #####   Working on wheezles #####
@@ -85,4 +101,6 @@ predictions = [round(value) for value in y_pred]
 
 # evaluate predictions
 accuracy = accuracy_score(wheezles_test, predictions)
+accuracy_nb = accuracy_score(wheezles_test, predictions,normalize=False)
 print("Accuracy: %.2f%%" % (accuracy * 100.0))
+print("Nb correct estimation : %.2d" % (accuracy_nb) + " over %.2d" % (nb_lines))
