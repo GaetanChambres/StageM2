@@ -1,4 +1,4 @@
-endTime: '1.736'
+endTime: '6.636'
 indent: '4'
 lowlevel:
   frameSize: '2048'
@@ -15,7 +15,7 @@ rhythm:
   method: degara
   minTempo: '40'
   stats: '["mean", "var", "median", "min", "max", "dmean", "dmean2", "dvar", "dvar2"]'
-startTime: '0.264'
+startTime: '3.25'
 tonal:
   frameSize: '4096'
   hopSize: '2048'
