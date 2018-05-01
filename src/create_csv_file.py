@@ -3,9 +3,9 @@ import csv
 import re
 
 
-input_directory = './data/database/DS3Full/'
-output_directory = './data/csv/initial_csv_v2/'
-output_file = 'DS3globalV2.csv'
+input_directory = './data/database/version3_challenge/test/'
+output_directory = './data/csv/challenge/'
+output_file = 'test_info.csv'
 output = output_directory + output_file
 out_file = open(output, "w")
 

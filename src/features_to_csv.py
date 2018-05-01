@@ -5,9 +5,9 @@ import essentia.standard as std
 from essentia.standard import *
 
 # init folders to work on
-input_data = './data/database/DS3Full/'
-info_file = './data/csv/initial_csv_v2/DS3globalV2.csv'
-output_file = './data/csv/mfccs_csv/DS3globalfeatures.csv'
+input_data = './data/database/version3_challenge/train/'
+info_file = './data/csv/challenge/train_info.csv'
+output_file = './data/csv/challenge/mfcc_train.csv'
 
 with open(info_file) as f:
     for i, l in enumerate(f):
@@ -70,9 +70,16 @@ while info:
     # string_mfcc = string_mfcc[:-1]
     # #print string_mfcc
     #
-
+    if(int(crackle) == 0 and int(wheezle) == 0):
+        normal = 1
+    else:
+        normal = 0
+    if(int(crackle) == 1 and int(wheezle) == 1):
+        both = 1
+    else:
+        both = 0
     # write mfccs file
-    out_file.write(patient_number + "," + record_index + "," + body_area + "," + channel + "," + record_tool + "," + start_time + "," + end_time + "," + crackle + "," + wheezle.rstrip('\n') + "," + string_mfcc + "\n")
+    out_file.write(patient_number + "," + start_time + "," + end_time + "," + str(normal) + "," + crackle + "," + wheezle.rstrip('\n') + "," + str(both) + "," + string_mfcc + "\n")
 
     # out_file.write("\n")
     print str(cpt) + " over " + str(nb_lines)
