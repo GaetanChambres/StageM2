@@ -5,9 +5,9 @@ import essentia.standard as std
 from essentia.standard import *
 
 # init folders to work on
-input_data = './data/database/version3_challenge/train/'
-info_file = './data/csv/challenge/train_info.csv'
-output_file = './data/csv/challenge/mfcc_train.csv'
+input_data = './data/database/version3_challenge/test/'
+info_file = './data/csv/challenge/test_info.csv'
+output_file = './data/csv/challenge/mfcc_test.csv'
 
 with open(info_file) as f:
     for i, l in enumerate(f):
@@ -70,16 +70,20 @@ while info:
     # string_mfcc = string_mfcc[:-1]
     # #print string_mfcc
     #
+    classification = 0
+    # if normal -> classification 1 / if crackles -> classification 2 / if wheezles -> classification 3 / if both -> classification 4
     if(int(crackle) == 0 and int(wheezle) == 0):
-        normal = 1
+        classification = 1
+    elif(int(crackle) == 1 and int(wheezle) == 1):
+        classification = 4
     else:
-        normal = 0
-    if(int(crackle) == 1 and int(wheezle) == 1):
-        both = 1
-    else:
-        both = 0
+        if(int(crackle) == 1):
+            classification = 2
+        if(int(wheezle) == 1):
+            classification = 3
     # write mfccs file
-    out_file.write(patient_number + "," + start_time + "," + end_time + "," + str(normal) + "," + crackle + "," + wheezle.rstrip('\n') + "," + str(both) + "," + string_mfcc + "\n")
+    # out_file.write(patient_number + "," + start_time + "," + end_time + "," + str(normal) + "," + crackle + "," + wheezle.rstrip('\n') + "," + str(both) + "," + string_mfcc[:-1] + "\n")
+    out_file.write(patient_number + "," + start_time + "," + end_time + "," + str(classification) + "," + string_mfcc[:-1] + "\n")
 
     # out_file.write("\n")
     print str(cpt) + " over " + str(nb_lines)

@@ -2,11 +2,11 @@ import essentia
 import essentia.standard as es
 import yaml
 
-input = open("data/database/DS1Full/102_1b1_Ar_sc_AKGC417L.txt")
+input = open("data/database/version2_patient/DS1/102_1b1_Ar_sc_AKGC417L.txt")
 start,end,crackles,wheezles = input.readline().split()
 
-audio_in = "data/database/DS1Full/102_1b1_Ar_sc_AKGC417L.wav"
-features_out = "features_test.json"
+audio_in = "data/database/version2_patient/DS1/102_1b1_Ar_sc_AKGC417L.wav"
+features_out = "data/tmp/features_test.json"
 
 
 profile = dict(
@@ -46,8 +46,9 @@ import sys
 import subprocess
 arg1 = audio_in
 arg2 = features_out
-subprocess.call(['essentia_streaming_extractor_freesound', arg1, arg2])
+subprocess.call(['essentia_streaming_extractor_freesound', arg1, arg2, 'profile.yml'])
 
+print(start)
 
 import json
 with open("features_test.json") as json_data:

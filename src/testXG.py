@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-
 import pandas as pd
 from numpy import loadtxt,append
 from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+import sklearn.metrics as sklm
 
 
 import warnings
@@ -48,7 +47,7 @@ combined_dataset = train1_dataset
 #         tmp = i + 1
 #     nb_lines = tmp
 nb_lines = len(test_dataset)
-
+print(nb_lines)
 # print(dataset.shape)
 info = combined_dataset[:,:3]
 normal_train = combined_dataset[:,3:4]
@@ -57,11 +56,29 @@ wheezles_train = combined_dataset[:,5:6]
 both_train = combined_dataset[:,6:7]
 features_train = combined_dataset[:,7:]
 
-normal_test = combined_dataset[:,3:4]
-crackles_test = combined_dataset[:,4:5]
-wheezles_test = combined_dataset[:,5:6]
-both_test = combined_dataset[:,6:7]
-features_test = combined_dataset[:,7:]
+normal_stats = 0
+crackles_stats = 0
+wheezles_stats = 0
+both_stats = 0
+normal_test = test_dataset[:,3:4]
+crackles_test = test_dataset[:,4:5]
+wheezles_test = test_dataset[:,5:6]
+both_test = test_dataset[:,6:7]
+features_test = test_dataset[:,7:]
+
+for n in range(0,nb_lines):
+    if normal_test[n] == 1:
+        normal_stats += 1
+    if crackles_test[n] == 1:
+        crackles_stats += 1
+    if wheezles_test[n]:
+        wheezles_stats += 1
+    if both_test[n]:
+        both_stats += 1
+print(normal_stats)
+print(crackles_stats)
+print(wheezles_stats)
+print(both_stats)
 #--------------------------------
 #####   Creating the model  #####
 #--------------------------------
@@ -76,6 +93,7 @@ model = XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
 #--------------------------------
 #####    Working on normal  #####
 #--------------------------------
+print('*********************')
 print("Working on normal")
 model.fit(features_train, normal_train)
 
@@ -88,10 +106,18 @@ y_pred = model.predict(features_test)
 predictions = [round(value) for value in y_pred]
 
 # evaluate predictions
-accuracy = accuracy_score(normal_test, predictions)
-# accuracy_nb = accuracy_score(normal_test, predictions,normalize=False)
-print("Accuracy: %.2f%%" % (accuracy * 100.0))
-# print("Nb correct estimation : %.2d" % (accuracy_nb) + " over %.2d" % (nb_lines))
+accuracy = sklm.accuracy_score(normal_test, predictions)
+accuracy_nb = sklm.accuracy_score(normal_test, predictions,normalize=False)
+tn, fp, fn, tp = sklm.confusion_matrix(normal_test, predictions).ravel()
+sensitivity = tp/(tp+fn)
+print("sensitivity : %.2f" % sensitivity)
+specificity = tn/(tn+fp)
+print("specificity : %.2f" % specificity)
+print("nb_preds: %d over %d" % (accuracy_nb,normal_stats))
+res = (sensitivity + specificity / 2)
+print("accuracy : %.2f%%" % (res))
+# print("Accuracy: %.2f%%" % (accuracy * 100.0))
+print('*********************')
 
 #--------------------------------
 #####   Working on crackles #####
@@ -108,11 +134,19 @@ y_pred = model.predict(features_test)
 predictions = [round(value) for value in y_pred]
 
 # evaluate predictions
-accuracy = accuracy_score(crackles_test, predictions)
-# accuracy_nb = accuracy_score(crackles_test, predictions,normalize=False)
-print("Accuracy: %.2f%%" % (accuracy * 100.0))
-# print("Nb correct estimation : %.2d" % (accuracy_nb) + " over %.2d" % (nb_lines))
+accuracy = sklm.accuracy_score(crackles_test, predictions)
+accuracy_nb = sklm.accuracy_score(crackles_test, predictions,normalize=False)
 
+tn, fp, fn, tp = sklm.confusion_matrix(crackles_test, predictions).ravel()
+sensitivity = tp/(tp+fn)
+print("sensitivity : %.2f" % sensitivity)
+specificity = tn/(tn+fp)
+print("specificity : %.2f" % specificity)
+print("nb_preds : %d over %d" % (accuracy_nb,crackles_stats))
+res = (sensitivity + specificity / 2)
+print("accuracy : %.2f%%" % (res))
+# print("Accuracy: %.2f%%" % (accuracy * 100.0))
+print('*********************')
 #--------------------------------
 #####   Working on wheezles #####
 #--------------------------------
@@ -128,10 +162,18 @@ y_pred = model.predict(features_test)
 predictions = [round(value) for value in y_pred]
 
 # evaluate predictions
-accuracy = accuracy_score(wheezles_test, predictions)
-# accuracy_nb = accuracy_score(wheezles_test, predictions,normalize=False)
-print("Accuracy: %.2f%%" % (accuracy * 100.0))
-# print("Nb correct estimation : %.2d" % (accuracy_nb) + " over %.2d" % (nb_lines))
+accuracy = sklm.accuracy_score(wheezles_test, predictions)
+accuracy_nb = sklm.accuracy_score(wheezles_test, predictions,normalize=False)
+tn, fp, fn, tp = sklm.confusion_matrix(wheezles_test, predictions).ravel()
+sensitivity = tp/(tp+fn)
+print("sensitivity : %.2f" % sensitivity)
+specificity = tn/(tn+fp)
+print("specificity : %.2f" % specificity)
+print("nb_preds : %d over %d" % (accuracy_nb,wheezles_stats))
+res = (sensitivity + specificity / 2)
+print("accuracy : %.2f%%" % (res))
+# print("Accuracy: %.2f%%" % (accuracy * 100.0))
+print('*********************')
 
 #--------------------------------
 #####     Working on both   #####
@@ -148,7 +190,17 @@ y_pred = model.predict(features_test)
 predictions = [round(value) for value in y_pred]
 
 # evaluate predictions
-accuracy = accuracy_score(both_test, predictions)
+accuracy = sklm.accuracy_score(both_test, predictions)
+accuracy_nb = sklm.accuracy_score(both_test, predictions,normalize=False)
+
+tn, fp, fn, tp = sklm.confusion_matrix(both_test, predictions).ravel()
+sensitivity = tp/(tp+fn)
+print("sensitivity : %.2f" % sensitivity)
 # accuracy_nb = accuracy_score(both_test, predictions,normalize=False)
-print("Accuracy: %.2f%%" % (accuracy * 100.0))
-# print("Nb correct estimation : %.2d" % (accuracy_nb) + " over %.2d" % (nb_lines))
+specificity = tn/(tn+fp)
+print("specificity : %.2f" % specificity)
+print("nb_preds : %d over %d" % (accuracy_nb,both_stats))
+res = (sensitivity + specificity / 2)
+print("accuracy : %.2f%%" % (res))
+# print("Accuracy: %.2f%%" % (accuracy * 100.0))
+print('*********************')
