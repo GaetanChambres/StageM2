@@ -1,13 +1,12 @@
-#!/usr/bin/env python3
+import essentia
 import os
 import csv
 import re
 import yaml
 import json
 import csv
-from flatten_json import flatten
 
-input_directory = './data/database/DS1Full/'
+input_directory = './data/database/version2_patient/DS1/'
 output_directory = './data/csv/initial_csv_v3/'
 output_file = 'DS1globalV3.csv'
 output = output_directory + output_file
@@ -31,7 +30,7 @@ for filename in ordered_files:
         content = input_file.readline()
         while content:
             start_time,end_time,crackle,wheezle = content.split('\t')
-            
+
             profile = dict(
                 startTime = start_time,
                 endTime =  end_time,

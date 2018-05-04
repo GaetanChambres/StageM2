@@ -9,11 +9,12 @@ import sklearn.metrics as sklm
 import warnings
 warnings.filterwarnings("ignore")
 
-train_dataset = np.loadtxt("./data/csv/challenge/mfcc_train.csv", delimiter=",")
-test_dataset = np.loadtxt("./data/csv/challenge/mfcc_test.csv", delimiter=",")
+train_dataset = np.loadtxt("./data/csv/challenge/train_tmp_features.csv", delimiter=",")
+test_dataset = np.loadtxt("./data/csv/challenge/test_tmp_features.csv", delimiter=",")
 
-classification_train = train_dataset[:,3:4]
-features_train = train_dataset[:,4:]
+# header = train_dataset[:1,:]
+classification_train = train_dataset[1:,3:4]
+features_train = train_dataset[1:,4:]
 
 classification_test = test_dataset[:,3:4]
 features_test = test_dataset[:,4:]
