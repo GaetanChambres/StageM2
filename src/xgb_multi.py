@@ -9,8 +9,8 @@ import sklearn.metrics as sklm
 import warnings
 warnings.filterwarnings("ignore")
 
-input_train = "./data/csv/challenge/train_all.csv"
-input_test = "./data/csv/challenge/train_all.csv"
+input_train = "./data/csv/challenge/train_lowlevel.csv"
+input_test = "./data/csv/challenge/test_lowlevel.csv"
 with open(input_train) as f1:
     line1 = f1.readline()
     data1= line1.split(',')
@@ -130,15 +130,15 @@ accuracy_nb = sklm.accuracy_score(classification_test, predictions,normalize=Fal
 SEc = cc/tc
 SEw = cw/tw
 SEb = cb/tb
-print("Sensitivity crackles (cc/tc) : %.2f" % SEc)
-print("Sensitivity wheezes (cw/tw) : %.2f" % SEw)
-print("Sensitivity both (cb/tb) : %.2f" % SEb)
+print("Sensitivity crackles (cc/tc) : %.4f" % SEc)
+print("Sensitivity wheezes (cw/tw) : %.4f" % SEw)
+print("Sensitivity both (cb/tb) : %.4f" % SEb)
 sensitivity_num = cc+cw+cb
 sensitivity_denum = tc+tw+tb
 sensitivity_global = sensitivity_num/sensitivity_denum
 specificity_global = cn/tn
 accuracy = (sensitivity_global + specificity_global)/2
-print("sensitivity global : %.2f" % sensitivity_global)
-print("specificity (cn/tn)) : %.2f" % specificity_global)
+print("sensitivity global : %.4f" % sensitivity_global)
+print("specificity (cn/tn)) : %.4f" % specificity_global)
 print("Accuracy: %.2f%%" % (accuracy * 100.0))
 print('*********************')

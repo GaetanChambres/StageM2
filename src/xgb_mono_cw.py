@@ -75,6 +75,20 @@ with open(input_test) as f2:
 #     nbcols_info_test = csv_nb_cols(f4,delimiter = ",")
 #     # print(nbcols_info_test)
 
+patient = []
+record = []
+body = []
+with open(info_test) as tinf:
+    nbcol = csv_nb_cols(tinf,delimiter=",")
+    line = tinf.readline()
+    while(line):
+        patient_number,record_index,body_area,record_tool,channel,start_time,end_time,crackle,wheezle = line.split(',')
+        patient.append(patient_number)
+        record.append(record_index)
+        body.append(body_area)
+        line = tinf.readline()
+
+
 print("LF -- Loading train files")
 train_dataset = np.loadtxt(input_train, delimiter=",", skiprows = 1, usecols=range(1,nbcols_train))
 train_info = np.loadtxt(info_train,delimiter = ',',skiprows = 0,usecols=range(7,9))
@@ -118,25 +132,6 @@ print(len(crackle_pred))
 print(len(crackle_predictions))
 print(confusion_crackles)
 
-
-# tmp_cpt=0
-# with open(input_test,'r') as feat:
-#     feat_out = open(tmp_feat,"w")
-#     info_out = open(tmp_info,"w")
-#     info_in = open(info_test,"r")
-#     for cpt in range(0,len(crackle_predictions)):
-#         line_feat = feat.readline()
-#         line_info = info_in.readline()
-#         if(crackle_predictions[cpt] == 0): # cycle not predicted as having crackle
-#             # tmp_cpt+=1
-#             feat_out.write(line_feat)
-#             info_out.write(line_info)
-#     feat_out.close()
-#     info_in.close()
-#     info_out.close()
-#     # print(tmp_cpt)
-#     print(file_len(tmp_feat))
-#     print(file_len(tmp_info))
 saved_prediction = len(crackle_predictions)*[0]
 for cpt in range(0,len(crackle_predictions)):
     if(crackle_predictions[cpt] == 1):
@@ -145,15 +140,6 @@ for cpt in range(0,len(crackle_predictions)):
         saved_prediction[cpt] = 0
 print(saved_prediction)
 
-#
-# with open(tmp_feat) as t:
-#     nbcols_tmp_feat = csv_nb_cols(t,delimiter = ",")
-#
-# test_dataset_tmp = np.loadtxt(tmp_feat, delimiter=",", skiprows = 1, usecols=range(1,nbcols_tmp_feat))
-# info_tmp = np.loadtxt(tmp_info,delimiter = ',', skiprows = 0, usecols=range(7,9))
-# print("LF -- Reading data in test files")
-# classification_test_wheeze = info_tmp[:,1:2]
-# features_test = test_dataset_tmp[:,1:]
 
 print("CM -- Crackle -- Working on crackles")
 print("CM -- Crackle -- Train the model")
@@ -220,15 +206,23 @@ print(mc)
 SEc = cc/tc
 SEw = cw/tw
 SEb = cb/tb
-print("Sensitivity crackles (cc/tc) : %.2f" % SEc)
-print("Sensitivity wheezes (cw/tw) : %.2f" % SEw)
-print("Sensitivity both (cb/tb) : %.2f" % SEb)
+print("Sensitivity crackles (cc/tc) : %.4f" % SEc)
+print("Sensitivity wheezes (cw/tw) : %.4f" % SEw)
+print("Sensitivity both (cb/tb) : %.4f" % SEb)
 sensitivity_num = cc+cw+cb
 sensitivity_denum = tc+tw+tb
 sensitivity_global = sensitivity_num/sensitivity_denum
 specificity_global = cn/tn
 accuracy = (sensitivity_global + specificity_global)/2
-print("sensitivity global : %.2f" % sensitivity_global)
-print("specificity (cn/tn)) : %.2f" % specificity_global)
+print("sensitivity global : %.4f" % sensitivity_global)
+print("specificity (cn/tn)) : %.4f" % specificity_global)
 print("Accuracy: %.2f%%" % (accuracy * 100.0))
 print('*********************')
+
+
+final = open("./data/csv/challenge/final.csv","w")
+for z in range(0,len(patient)):
+    filename = str(str(patient[z])+"_"+str(record[z])+"_"+str(body[z]))
+    res = filename + "," + str(saved_prediction[z])
+    final.write(res)
+    final.write("\n")
