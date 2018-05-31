@@ -25,7 +25,7 @@ info = in_info.readline() #line 1
 while info:
     cpt+=1
     #saving csv info of the line in some variables
-    patient_number,record_index,body_area,record_tool,channel,start_time,end_time,crackle,wheezle = info.split(',')
+    patient_number,record_index,body_area,record_tool,channel,patho,start_time,end_time,crackle,wheezle = info.split(',')
 
     # starting the  features computation
 

@@ -30,7 +30,7 @@ def file_len(fname):
 
 input_directory = './data/database/version3_challenge/test/'
 output_directory = './data/csv/challenge/'
-output_file = 'test_mfcc'
+output_file = 'test_lowlevel'
 output = output_directory + output_file
 out_file = open(output+".csv", "w")
 display_ui = "********************************************"
@@ -130,11 +130,11 @@ for filename in ordered_files:
                 # kind_of_feature[1] != 'key_temperley'):
 
                 # LOWLEVEL FEATURES
-                # if(kind_of_feature[0] != 'metadata' and
-                # kind_of_feature[0] == 'lowlevel' and
-                # kind_of_feature[1] != 'silence_rate_60dB' and
-                # kind_of_feature[1] != 'sound_start_frame' and
-                # kind_of_feature[1] != 'sound_stop_frame'):
+                if(kind_of_feature[0] != 'metadata' and
+                kind_of_feature[0] == 'lowlevel' and
+                kind_of_feature[1] != 'silence_rate_60dB' and
+                kind_of_feature[1] != 'sound_start_frame' and
+                kind_of_feature[1] != 'sound_stop_frame'):
 
                 # RHYTHM FEATURES
                 # if(kind_of_feature[0] != 'metadata' and
@@ -158,7 +158,7 @@ for filename in ordered_files:
                 # kind_of_feature[1] != 'key_temperley'):
 
                 # MFCC
-                if(kind_of_feature[1] == "mfcc" and kind_of_feature[2] == "mean"):
+                # if(kind_of_feature[1] == "mfcc" and kind_of_feature[2] == "mean"):
 
 
                     tmp = features[name_feature]

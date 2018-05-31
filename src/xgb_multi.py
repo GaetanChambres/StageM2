@@ -9,8 +9,9 @@ import sklearn.metrics as sklm
 import warnings
 warnings.filterwarnings("ignore")
 
-input_train = "./data/csv/challenge/train_lowlevel.csv"
-input_test = "./data/csv/challenge/test_lowlevel.csv"
+
+input_train = "./data/csv/challenge/train_pathologies.csv"
+input_test = "./data/csv/challenge/test_pathologies.csv"
 with open(input_train) as f1:
     line1 = f1.readline()
     data1= line1.split(',')
@@ -31,11 +32,13 @@ test_dataset = np.loadtxt(input_test, delimiter=",", skiprows = 1, usecols=range
 # train_dataset = np.loadtxt("./data/csv/challenge/mfcc_train.csv", delimiter=",")
 # test_dataset = np.loadtxt("./data/csv/challenge/mfcc_test.csv", delimiter=",")
 # header = train_dataset[:1,:]
-classification_train = train_dataset[:,0:1]
-features_train = train_dataset[:,1:]
+pathologies_train = train_dataset[:,0:1]
+classification_train = train_dataset[:,1:2]
+features_train = train_dataset[:,2:]
 
-classification_test = test_dataset[:,0:1]
-features_test = test_dataset[:,1:]
+pathologies_test = test_dataset[:,0:1]
+classification_test = test_dataset[:,1:2]
+features_test = test_dataset[:,2:]
 
 nb_lines = len(test_dataset)
 normal = 0
@@ -80,19 +83,35 @@ print("Step 3 : Extract predictions")
 predictions = [round(value) for value in y_pred]
 print("Predictions Extracted")
 
+#creation du tableau cycles/pathology
+pat = 5*[0] #5 lines
+for i in range(len(pat)): pat[i] = 9*[0] #9 cols
+t2=0
 #creation de la matrice de confusion
-mc = 5*[0]
-for i in range(len(mc)): mc[i] =5*[0]
+mc = 5*[0] #5 lines
+for i in range(len(mc)): mc[i] = 5*[0] #5 cols
 t=0
-#comme en python les tableaux exsitent pas, je decide de la parcourir ligne après ligne
-#dans l'ordre : n, c, w, b
-#attention les liste commencent à 0 et non pas à 1!
 
 
 cc = tc = cw = tw = cb = tb = cn = tn = 0
+for i in range(0,len(classification_train)):
+    vr = int(classification_train[i])
+    nb_pat = int(pathologies_train[i])
+
+    pat[vr-1][nb_pat-1]+=1
+    pat[vr-1][8]+=1
+    pat[4][nb_pat-1]+=1
+    t2+=1
+
 for i in range(0,len(classification_test)):
     vr = int(classification_test[i])
     vp = int(predictions[i])
+    nb_pat = int(pathologies_test[i])
+
+    pat[vr-1][nb_pat-1]+=1
+    pat[vr-1][8]+=1
+    pat[4][nb_pat-1]+=1
+    t2+=1
 
     mc[vr-1][vp-1]+=1
     mc[vr-1][4]+=1
@@ -116,9 +135,13 @@ for i in range(0,len(classification_test)):
         if vp == 1:
             cn+=1
 
+
 print("cc = %d, tc = %d, cw = %d, tw = %d, cb = %d, tb = %d, cn = %d, tn = %d" % (cc,tc,cw,tw,cb,tb,cn,tn))
 mc[4][4] = t
+pat[4][8] = t2
 verif=(mc[4][0]+mc[4][1]+mc[4][2]+mc[4][3])-(mc[0][4]+mc[1][4]+mc[2][4]+mc[3][4])
+print("tabeleau :")
+print(pat)
 print("voici la matrice : ")
 print(mc)
 print("elle est juste si %d=0" % (verif))
