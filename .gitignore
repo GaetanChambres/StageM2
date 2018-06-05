@@ -1,5 +1,8 @@
 # ignore database
 #including >1k8 wav&txt files
-data/database/
+cycle_prediction/data/
+pathology_prediction/data/
+
 #ignore some csv because too heavy to be upload
-data/csv/challenge/
+#cycle_prediction/data/csv/challenge/
+#pathology_prediction/data/csv/challenge/
