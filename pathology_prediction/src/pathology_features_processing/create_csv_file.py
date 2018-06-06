@@ -3,9 +3,9 @@ import csv
 import re
 
 
-input_directory = './data/database/debug/train/'
-output_directory = './data/csv/debug/'
-output_file = 'train_info.csv'
+input_directory = './pathology_prediction/data/database/debug/test/'
+output_directory = './pathology_prediction/data/csv/debug/'
+output_file = 'test_info.csv'
 output = output_directory + output_file
 out_file = open(output, "w")
 
@@ -14,7 +14,7 @@ nb_files = (len(os.listdir(input_directory)))/2
 
 ordered_files = sorted(os.listdir(input_directory))
 
-info_pathologies = "./data/diag.txt"
+info_pathologies = "./pathology_prediction/data/diag.txt"
 with open(info_pathologies) as fp:
     diag = fp.read().splitlines()
 
