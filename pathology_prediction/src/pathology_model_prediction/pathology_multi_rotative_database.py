@@ -3,48 +3,35 @@
 import pandas as pd
 import numpy as np
 import xgboost as xgb
-# from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split
 import sklearn.metrics as sklm
 
 import warnings
 warnings.filterwarnings("ignore")
 
-# input_train = "./pathology_prediction/data/csv/debug/train_pathologies.csv"
-# input_test = "./pathology_prediction/data/csv/debug/test_pathologies.csv"
+input_total = "./pathology_prediction/data/csv/complete/complete_pathologies.csv"
 
-input_train = "./pathology_prediction/data/csv/challenge/train_pathologies.csv"
-input_test = "./pathology_prediction/data/csv/challenge/test_pathologies.csv"
-input_total = "./pathology_prediction/data/csv/complete/total_pathologies.csv"
+with open(input_total) as f3:
+    line3 = f3.readline()
+    data3 = line3.split(',')
+    print(data3)
+    nbcols_total = len(data3)
+    print(nbcols_total)
 
-with open(input_train) as f1:
-    line1 = f1.readline()
-    data1= line1.split(',')
-    print(data1)
-    nbcols_train = len(data1)
-    print(nbcols_train)
-with open(input_test) as f2:
-    line2 = f2.readline()
-    data2 = line2.split(',')
-    print(data2)
-    nbcols_test = len(data2)
-    print(nbcols_test)
+total_dataset = np.loadtxt(input_total, delimiter=",", skiprows=1, usecols=range(1,nbcols_total))
 
+pathologies = total_dataset[:,0:1]
+classification = total_dataset[:,1:2]
+features = total_dataset[:,2:]
 
+nb_lines = len(total_dataset)
 
-
-train_dataset = np.loadtxt(input_train, delimiter=",", skiprows = 1, usecols=range(1,nbcols_train))
-test_dataset = np.loadtxt(input_test, delimiter=",", skiprows = 1, usecols=range(1,nbcols_test))
-# header = train_dataset[:1,:]
-pathologies_train = train_dataset[:,0:1]
-classification_train = train_dataset[:,1:2]
-features_train = train_dataset[:,2:]
-
-pathologies_test = test_dataset[:,0:1]
-classification_test = test_dataset[:,1:2]
-features_test = test_dataset[:,2:]
-
-nb_lines = len(test_dataset)
+seed = 7
+test_size_ratio = 0.33
 asthma = LRTI = pneumonia = bronchioectasis = bronchiolitis = URTI = COPD = healthy = total = 0
+print("init ok !")
+features_train, features_test, pathologies_train, pathologies_test = train_test_split(features, pathologies, test_size = test_size_ratio, random_state = seed)
+print("split ok !")
 for i in range(0,len(pathologies_train)):
     if(pathologies_train[i] == 1):
         asthma += 1
@@ -94,22 +81,19 @@ print(ratios)
 
 print("computation is over")
 
-
 model = xgb.XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
        colsample_bytree=1, gamma=0, learning_rate=0.1, max_delta_step=0,
        max_depth=3, min_child_weight=1, missing=None, n_estimators=100,
        n_jobs=1, nthread=None, objective='multi:softmax', random_state=0,
-       reg_alpha=0, reg_lambda=1, scale_pos_weight=1, seed=None,#class_num=8,
+       reg_alpha=0, reg_lambda=1, scale_pos_weight=ratios, seed=None,#class_num=8,
        silent=True, subsample=1)
 
 #--------------------------------
 #####    MULTICLASS MODEL   #####
 #--------------------------------
-# sample_weights_data = [0,0,0.04,0.01,0.02,0.03,0.83,0.05]
-# sample_weights_data = [0,0,0,0,0,0,1,0]
+
 print("MULTICLASS MODEL")
 print("Step 1 : train the model")
-# model.fit(features_train, classification_train)
 model.fit(features_train, pathologies_train)
 print("Model trained")
 # print(model)
