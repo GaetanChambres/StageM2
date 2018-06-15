@@ -26,11 +26,12 @@ features = total_dataset[:,2:]
 
 nb_lines = len(total_dataset)
 
-seed = 7
+# seed = 1
 test_size_ratio = 0.33
 asthma = LRTI = pneumonia = bronchioectasis = bronchiolitis = URTI = COPD = healthy = total = 0
 print("init ok !")
-features_train, features_test, pathologies_train, pathologies_test = train_test_split(features, pathologies, test_size = test_size_ratio, random_state = seed)
+# features_train, features_test, pathologies_train, pathologies_test = train_test_split(features, pathologies, test_size = test_size_ratio, random_state = seed)
+features_train, features_test, pathologies_train, pathologies_test = train_test_split(features, pathologies, test_size = test_size_ratio)
 print("split ok !")
 for i in range(0,len(pathologies_train)):
     if(pathologies_train[i] == 1):
@@ -231,8 +232,8 @@ for i in range(0,len(pathologies_test)):
     total+=1
 
 arr[8][0] = len(pathologies_test)
-arr[8][1] = total_ok
-arr[8][2] = total
+arr[8][1] = total
+arr[8][2] = total_ok
 
 print( "a triplet by pathology \n [ a, b, c ] \n a = nb of cycle expected \n  b = nb total of cycle predicted \n b = nb of cycle correctly prediced \n")
 print(arr)

@@ -99,7 +99,7 @@ model = xgb.XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
        colsample_bytree=1, gamma=0, learning_rate=0.1, max_delta_step=0,
        max_depth=3, min_child_weight=1, missing=None, n_estimators=100,
        n_jobs=1, nthread=None, objective='multi:softmax', random_state=0,
-       reg_alpha=0, reg_lambda=1, scale_pos_weight=1, seed=None,#class_num=8,
+       reg_alpha=0, reg_lambda=1, scale_pos_weight=ratios, seed=None,class_num=8,
        silent=True, subsample=1)
 
 #--------------------------------
@@ -247,8 +247,8 @@ for i in range(0,len(pathologies_test)):
     total+=1
 
 arr[8][0] = len(pathologies_test)
-arr[8][1] = total_ok
-arr[8][2] = total
+arr[8][1] = total
+arr[8][2] = total_ok
 
 print( "a triplet by pathology \n [ a, b, c ] \n a = nb of cycle expected \n  b = nb total of cycle predicted \n b = nb of cycle correctly prediced \n")
 print(arr)
