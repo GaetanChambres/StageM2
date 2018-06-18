@@ -3,9 +3,9 @@ import csv
 import re
 
 
-input_directory = './pathology_prediction/data/database/complete/'
-output_directory = './pathology_prediction/data/csv/complete/'
-output_file = 'complete_info.csv'
+input_directory = './pathology_prediction/data/database/patient/DS3/'
+output_directory = './pathology_prediction/data/csv/patient/DS3/'
+output_file = 'DS3_info.csv'
 output = output_directory + output_file
 out_file = open(output, "w")
 

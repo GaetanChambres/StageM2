@@ -28,9 +28,9 @@ def file_len(fname):
     return i + 1
 # **********************************
 
-input_directory = './pathology_prediction/data/database/complete/'
-output_directory = './pathology_prediction/data/csv/complete/'
-output_file = 'complete_lowlevel'
+input_directory = './pathology_prediction/data/database/patient/DS3/'
+output_directory = './pathology_prediction/data/csv/patient/DS3/'
+output_file = 'DS3_lowlevel'
 output = output_directory + output_file
 out_file = open(output+".csv", "w")
 display_ui = "********************************************"
