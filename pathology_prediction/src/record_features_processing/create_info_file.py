@@ -3,9 +3,9 @@ import csv
 import re
 
 
-input_directory = './pathology_prediction/data/database/challenge/test/'
-output_directory = './pathology_prediction/data/csv/challenge/'
-output_file = 'test_info.csv'
+input_directory = './pathology_prediction/data/database/challenge/train/'
+output_directory = './pathology_prediction/data/csv/record_level/'
+output_file = 'train_info.csv'
 output = output_directory + output_file
 out_file = open(output, "w")
 
@@ -50,23 +50,8 @@ for filename in ordered_files:
                 if(tmp_patho == "Healthy"):
                     patho = 7
 
-        # print(filename)
-        # print(patient_number)
-        # print(patho)
-        # print(record_index)
-        # print(body_area)
-        # print(channel)
-        # print(record_tool)
-
-        while content:
-            start_time,end_time,crackle,wheezle = content.split('\t')
-            # print "start_time = ",start_time
-            # print "end_time = ",end_time
-            # print "crackles = ",crackle
-            # print "wheezle = ",wheezle
-
             # print(patient_number + "," + record_index + "," + body_area + "," + record_tool + "," + channel + "," + start_time + "," + end_time + "," + crackle + "," + wheezle)
-            out_file.write(patient_number + "," + str(patho) + "," + record_index + "," + body_area + "," + record_tool + "," + channel + "," + start_time + "," + end_time + "," + crackle + "," + wheezle)
+        out_file.write(filename+ "," + str(patho)+"\n")
 
-            content = input_file.readline()
+        content = input_file.readline()
         print "processed ",cpt,"over ",nb_files

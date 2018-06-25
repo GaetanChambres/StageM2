@@ -80,7 +80,15 @@ for i in range(0,len(pathologies_train)):
     if(pathologies_train[i] == 8):
         healthy += 1
         total += 1
-
+print(asthma)
+print(LRTI)
+print(pneumonia)
+print(bronchioectasis)
+print(bronchiolitis)
+print(URTI)
+print(COPD)
+print(healthy)
+print(total)
 if(asthma == 0):
     ratio_asthma = 0
 else:

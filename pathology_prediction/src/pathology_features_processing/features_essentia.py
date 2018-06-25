@@ -27,10 +27,10 @@ def file_len(fname):
             pass
     return i + 1
 # **********************************
+input_directory = './pathology_prediction/data/database/debug/test/'
+output_directory = './pathology_prediction/data/csv/debug/'
 
-input_directory = './pathology_prediction/data/database/patient/DS3/'
-output_directory = './pathology_prediction/data/csv/patient/DS3/'
-output_file = 'DS3_lowlevel'
+output_file = 'test_all'
 output = output_directory + output_file
 out_file = open(output+".csv", "w")
 display_ui = "********************************************"
@@ -115,26 +115,26 @@ for filename in ordered_files:
                 # print(type)
 
                 # ALL FEATURES
-                # if(kind_of_feature[0] != 'metadata' and
-                # kind_of_feature[1] != 'silence_rate_60dB' and
-                # kind_of_feature[1] != 'sound_start_frame' and
-                # kind_of_feature[1] != 'sound_stop_frame' and
-                # kind_of_feature[1] != 'beats_position' and
-                # kind_of_feature[1] != 'bpm_intervals' and
-                # kind_of_feature[1] != 'onset_times' and
-                # kind_of_feature[1] != 'chords_key' and
-                # kind_of_feature[1] != 'chords_progression' and
-                # kind_of_feature[1] != 'chords_scale' and
-                # kind_of_feature[1] != 'key_edma' and
-                # kind_of_feature[1] != 'key_krumhansl' and
-                # kind_of_feature[1] != 'key_temperley'):
-
-                # LOWLEVEL FEATURES
                 if(kind_of_feature[0] != 'metadata' and
-                kind_of_feature[0] == 'lowlevel' and
                 kind_of_feature[1] != 'silence_rate_60dB' and
                 kind_of_feature[1] != 'sound_start_frame' and
-                kind_of_feature[1] != 'sound_stop_frame'):
+                kind_of_feature[1] != 'sound_stop_frame' and
+                kind_of_feature[1] != 'beats_position' and
+                kind_of_feature[1] != 'bpm_intervals' and
+                kind_of_feature[1] != 'onset_times' and
+                kind_of_feature[1] != 'chords_key' and
+                kind_of_feature[1] != 'chords_progression' and
+                kind_of_feature[1] != 'chords_scale' and
+                kind_of_feature[1] != 'key_edma' and
+                kind_of_feature[1] != 'key_krumhansl' and
+                kind_of_feature[1] != 'key_temperley'):
+
+                # LOWLEVEL FEATURES
+                # if(kind_of_feature[0] != 'metadata' and
+                # kind_of_feature[0] == 'lowlevel' and
+                # kind_of_feature[1] != 'silence_rate_60dB' and
+                # kind_of_feature[1] != 'sound_start_frame' and
+                # kind_of_feature[1] != 'sound_stop_frame'):
 
                 # RHYTHM FEATURES
                 # if(kind_of_feature[0] != 'metadata' and
