@@ -150,14 +150,13 @@ params = {
     'num_class': 8,
     'gamma': 0,
     'max_depth': 3,
-    'subsample': 0.7,
     'colsample_bytree': 1,
     'min_child_weight': 1,
     'silent': 1,
     'eta': 0.1,
-    'seed': 1,
+    'scale_pos_weight': ratios,
 }
-num_round = 10
+num_round = 100
 watchlist = [(test, 'eval'), (train, 'train')]
 #--------------------------------
 #####    MULTICLASS MODEL   #####
@@ -172,6 +171,7 @@ evals_result = {}
 model = xgb.train(params, train, num_round, watchlist, evals_result=evals_result)
 print("Model trained")
 print()
+print(model.feature_importances_)
 # print(model)
 # xgb.plot_importance(model)
 # from matplotlib import pyplot
@@ -197,6 +197,7 @@ print(type(test_eval))
 print(test_eval)
 print("***********")
 # confusion = get_confusion_matrix(test_eval,y_pred,8)
-confusion = sklm.confusion_matrix(pathologies_test,y_pred)
-best_preds = np.asarray([np.argmax(line) for line in y_pred])
-print(confusion)
+confusion1 = sklm.confusion_matrix(pathologies_test,y_pred)
+print(confusion1)
+# best_preds = np.asarray([np.argmax(line) for line in y_pred])
+# confusion2 = sklm.confusion_matrix(pathologies_test,best_preds)
