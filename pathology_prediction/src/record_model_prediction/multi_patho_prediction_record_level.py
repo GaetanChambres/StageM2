@@ -144,14 +144,13 @@ params = {
     'num_class': 8,
     'gamma': 0,
     'max_depth': 3,
-    'subsample': 0.7,
     'colsample_bytree': 1,
     'min_child_weight': 1,
     'silent': 1,
     'eta': 0.1,
-    'seed': 1,
+    'scale_pos_weight': ratios,
 }
-num_round = 10
+num_round = 50
 watchlist = [(test, 'eval'), (train, 'train')]
 #--------------------------------
 #####    MULTICLASS MODEL   #####
