@@ -3,9 +3,9 @@ import csv
 import re
 
 
-input_directory = './pathology_prediction/data/database/challenge/test/'
+input_directory = './pathology_prediction/data/database/challenge/train/'
 output_directory = './pathology_prediction/data/csv/challenge/'
-output_file = 'test_info.csv'
+output_file = 'train_info.csv'
 output = output_directory + output_file
 out_file = open(output, "w")
 
@@ -66,7 +66,6 @@ for filename in ordered_files:
             # print "wheezle = ",wheezle
 
             # print(patient_number + "," + record_index + "," + body_area + "," + record_tool + "," + channel + "," + start_time + "," + end_time + "," + crackle + "," + wheezle)
-            out_file.write(patient_number + "," + str(patho) + "," + record_index + "," + body_area + "," + record_tool + "," + channel + "," + start_time + "," + end_time + "," + crackle + "," + wheezle)
-
+            out_file.write(filename+ "," + str(patho)+"\n")
             content = input_file.readline()
         print "processed ",cpt,"over ",nb_files
