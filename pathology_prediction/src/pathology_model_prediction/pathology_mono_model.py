@@ -9,27 +9,11 @@ import sklearn.metrics as sklm
 import warnings
 warnings.filterwarnings("ignore")
 
-def get_confusion_matrix (c1, c2, n_clusters) :
-    confusion_mat = np.zeros((n_clusters, n_clusters))
-
-    for class_num in range(n_clusters) :
-        for i in range(len(c1)):
-            classed = c1[i]
-
-    for i in range(n_clusters) :
-        c_i = set([index for index, value in enumerate(c1) if value == i])
-        for j in range(n_clusters) :
-            c_j = set([index for index, value in enumerate(c2) if value == j])
-
-            confusion_mat[i, j] =len(c_i.intersection(c_j))
-
-    return confusion_mat
-
 # input_train = "./pathology_prediction/data/csv/debug/train_pathologies.csv"
 # input_test = "./pathology_prediction/data/csv/debug/test_pathologies.csv"
 
-input_train = "./pathology_prediction/data/csv/challenge/train_pathologies.csv"
-input_test = "./pathology_prediction/data/csv/challenge/test_pathologies.csv"
+input_train = "./pathology_prediction/data/csv/challenge/train_pathologies_mono.csv"
+input_test = "./pathology_prediction/data/csv/challenge/test_pathologies_mono.csv"
 
 with open(input_train) as f1:
     line1 = f1.readline()
@@ -124,26 +108,20 @@ print(COPD)
 print(healthy)
 print(total)
 print("Compute the ratios")
-ratio_asthma = (total-asthma) / asthma
-ratio_LRTI = (total-LRTI) / LRTI
-ratio_pneumonia = (total-pneumonia) / pneumonia
-ratio_bronchioectasis = (total-bronchioectasis) / bronchioectasis
-ratio_bronchiolitis = (total-bronchiolitis) / bronchioectasis
-ratio_URTI = (total-URTI) / URTI
-ratio_COPD = (total-COPD) / COPD
-ratio_healthy = (total-healthy) / healthy
-
-ratios = [ratio_asthma,ratio_LRTI,ratio_pneumonia,ratio_bronchioectasis,ratio_bronchiolitis,ratio_URTI,ratio_COPD,ratio_healthy]
+# ratio_asthma = (total-asthma) / asthma
+# ratio_LRTI = (total-LRTI) / LRTI
+# ratio_pneumonia = (total-pneumonia) / pneumonia
+# ratio_bronchioectasis = (total-bronchioectasis) / bronchioectasis
+# ratio_bronchiolitis = (total-bronchiolitis) / bronchioectasis
+# ratio_URTI = (total-URTI) / URTI
+# ratio_COPD = (total-COPD) / COPD
+# ratio_healthy = (total-healthy) / healthy
+#
+# ratios = [ratio_asthma,ratio_LRTI,ratio_pneumonia,ratio_bronchioectasis,ratio_bronchiolitis,ratio_URTI,ratio_COPD,ratio_healthy]
 print("Ratios are computed :")
 print(ratios)
 print("#################")
 
-
-# model = xgb.XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
-#        learning_rate=0.1, max_delta_step=0,
-#     , n_estimators=100,
-#        reg_alpha=0, reg_lambda=1, scale_pos_weight=ratios, seed=None,class_num=8,
-#        silent=True, subsample=1)
 params = {
     'booster': 'gbtree',
     'objective': 'multi:softmax',
@@ -156,7 +134,7 @@ params = {
     'eta': 0.1,
     'scale_pos_weight': ratios,
 }
-num_round = 100
+num_round = 50
 watchlist = [(test, 'eval'), (train, 'train')]
 #--------------------------------
 #####    MULTICLASS MODEL   #####
@@ -171,11 +149,13 @@ evals_result = {}
 model = xgb.train(params, train, num_round, watchlist, evals_result=evals_result)
 print("Model trained")
 print()
-print(model.feature_importances_)
+# print(model.feature_importances_)
 # print(model)
-# xgb.plot_importance(model)
-# from matplotlib import pyplot
-# pyplot.show()
+xgb.plot_importance(model,max_num_features = 20)
+from matplotlib import pyplot
+# xgb.plot_tree(model)
+pyplot.show()
+print()
 ###################################################################################
 # make predictions for test data
 print("Step 2 : predict the model")
@@ -198,6 +178,7 @@ print(test_eval)
 print("***********")
 # confusion = get_confusion_matrix(test_eval,y_pred,8)
 confusion1 = sklm.confusion_matrix(pathologies_test,y_pred)
+print(len(confusion1))
 print(confusion1)
 # best_preds = np.asarray([np.argmax(line) for line in y_pred])
 # confusion2 = sklm.confusion_matrix(pathologies_test,best_preds)
