@@ -165,10 +165,10 @@ evals_result = {}
 model = xgb.train(params, train, num_round, watchlist, evals_result=evals_result)
 print("Model trained")
 print()
-# print(model)
-# xgb.plot_importance(model)
-# from matplotlib import pyplot
-# pyplot.show()
+xgb.plot_importance(model,max_num_features = 25)
+from matplotlib import pyplot
+pyplot.show()
+print()
 ###################################################################################
 # make predictions for test data
 print("Step 2 : predict the model")

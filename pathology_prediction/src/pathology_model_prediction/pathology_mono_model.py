@@ -12,8 +12,8 @@ warnings.filterwarnings("ignore")
 # input_train = "./pathology_prediction/data/csv/debug/train_pathologies.csv"
 # input_test = "./pathology_prediction/data/csv/debug/test_pathologies.csv"
 
-input_train = "./pathology_prediction/data/csv/challenge/train_pathologies_mono.csv"
-input_test = "./pathology_prediction/data/csv/challenge/test_pathologies_mono.csv"
+input_train = "./pathology_prediction/data/csv/challenge/mono_class/train_healthy_mono.csv"
+input_test = "./pathology_prediction/data/csv/challenge/mono_class/test_healthy_mono.csv"
 
 with open(input_train) as f1:
     line1 = f1.readline()
@@ -65,7 +65,8 @@ features_t = test_dataset.drop(['pathologie'],axis=1)
 print("Test data ready")
 print("Converting data to DMatrix")
 nb_lines = len(test_dataset)
-asthma = LRTI = pneumonia = bronchioectasis = bronchiolitis = URTI = COPD = healthy = total = 0
+negatives = 0
+positives = 0
 ratios = 1
 train = xgb.DMatrix(features_T,label=pathologies_T)
 test = xgb.DMatrix(features_t,label=pathologies_t)
@@ -75,49 +76,14 @@ print("Computing the ratios for balanced training")
 print("Parsing train data")
 for i in range(0,len(pathologies_train)):
     if(pathologies_train[i] == 0):
-        asthma += 1
-        total += 1
+        negatives += 1
     if(pathologies_train[i] == 1):
-        LRTI += 1
-        total += 1
-    if(pathologies_train[i] == 2):
-        pneumonia += 1
-        total += 1
-    if(pathologies_train[i] == 3):
-        bronchioectasis += 1
-        total += 1
-    if(pathologies_train[i] == 4):
-        bronchiolitis += 1
-        total += 1
-    if(pathologies_train[i] == 5):
-        URTI += 1
-        total += 1
-    if(pathologies_train[i] == 6):
-        COPD += 1
-        total += 1
-    if(pathologies_train[i] == 7):
-        healthy += 1
-        total += 1
-print(asthma)
-print(LRTI)
-print(pneumonia)
-print(bronchioectasis)
-print(bronchiolitis)
-print(URTI)
-print(COPD)
-print(healthy)
-print(total)
+        positives += 1
 print("Compute the ratios")
-# ratio_asthma = (total-asthma) / asthma
-# ratio_LRTI = (total-LRTI) / LRTI
-# ratio_pneumonia = (total-pneumonia) / pneumonia
-# ratio_bronchioectasis = (total-bronchioectasis) / bronchioectasis
-# ratio_bronchiolitis = (total-bronchiolitis) / bronchioectasis
-# ratio_URTI = (total-URTI) / URTI
-# ratio_COPD = (total-COPD) / COPD
-# ratio_healthy = (total-healthy) / healthy
-#
-# ratios = [ratio_asthma,ratio_LRTI,ratio_pneumonia,ratio_bronchioectasis,ratio_bronchiolitis,ratio_URTI,ratio_COPD,ratio_healthy]
+if(positives == 0):
+    ratios = 0
+else :
+    ratios = negatives / positives
 print("Ratios are computed :")
 print(ratios)
 print("#################")
@@ -151,7 +117,7 @@ print("Model trained")
 print()
 # print(model.feature_importances_)
 # print(model)
-xgb.plot_importance(model,max_num_features = 20)
+xgb.plot_importance(model,max_num_features = 25)
 from matplotlib import pyplot
 # xgb.plot_tree(model)
 pyplot.show()
