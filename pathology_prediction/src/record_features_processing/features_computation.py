@@ -8,10 +8,10 @@ def file_len(fname):
             pass
     return i + 1
 
-input_directory = './pathology_prediction/data/database/challenge/train/'
+input_directory = './pathology_prediction/data/database/challenge/test/'
 output_directory = './pathology_prediction/data/csv/record_level/'
 
-output_file = 'train_all'
+output_file = 'test_all'
 output = output_directory + output_file
 out_file = open(output+".csv", "w")
 display_ui = "********************************************"
@@ -85,7 +85,9 @@ for filename in ordered_files:
             kind_of_feature[1] != 'chords_scale' and
             kind_of_feature[1] != 'key_edma' and
             kind_of_feature[1] != 'key_krumhansl' and
-            kind_of_feature[1] != 'key_temperley'):
+            kind_of_feature[1] != 'key_temperley' and
+            kind_of_feature[1] != 'duration' and
+            kind_of_feature[1] != 'effective_duration'):
 
             # LOWLEVEL FEATURES
             # if(kind_of_feature[0] != 'metadata' and
@@ -103,7 +105,9 @@ for filename in ordered_files:
 
             # SFX FEATURES
             # if(kind_of_feature[0] != 'metadata' and
-            # kind_of_feature[0] == 'sfx'):
+            # kind_of_feature[0] == 'sfx' and
+            # kind_of_feature[1] != 'duration' and
+            # kind_of_feature[1] != 'effective_duration'):):
 
             # TONAL FEATURES
             # if(kind_of_feature[0] != 'metadata' and

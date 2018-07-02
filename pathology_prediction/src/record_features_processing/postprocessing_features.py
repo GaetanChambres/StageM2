@@ -8,9 +8,9 @@ def file_len(fname):
             nb+=1
     return nb
 
-input1 = './pathology_prediction/data/csv/challenge/test_all.csv'
-input2 = './pathology_prediction/data/csv/challenge/test_info.csv'
-output = './pathology_prediction/data/csv/challenge/test_pathologies.csv'
+input1 = './pathology_prediction/data/csv/record_level/test_all.csv'
+input2 = './pathology_prediction/data/csv/record_level/test_info.csv'
+output = './pathology_prediction/data/csv/record_level/test_pathologies.csv'
 
 feat_len = file_len(input1)-1
 info_len = file_len(input2)
