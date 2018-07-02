@@ -47,6 +47,7 @@ print("Numpy arrays ready")
 print("Preparing data for DMatrix")
 print("Preparing train data")
 train_dataset = pd.read_csv(input_train)
+# print(train_dataset)
 pathologies_T = train_dataset.pathologie
 # print(pathologies_T)
 del train_dataset['filename']
@@ -133,6 +134,7 @@ print("Step 3 : Extract predictions")
 print("Predictions Extracted")
 print('error=%f' % (sum(1 for i in range(len(y_pred)) if int(y_pred[i] > 0.5) != labels[i]) / float(len(y_pred))))
 print(evals_result)
+# TODO pred proba, fonction native pour le faire ??
 print("***********")
 test_eval= pathologies_test.flatten()
 print(len(y_pred))
