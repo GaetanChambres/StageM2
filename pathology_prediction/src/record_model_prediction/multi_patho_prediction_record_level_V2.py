@@ -9,14 +9,24 @@ import sklearn.metrics as sklm
 import warnings
 warnings.filterwarnings("ignore")
 
-# input_train = "./pathology_prediction/data/csv/debug/train_pathologies.csv"
-# input_test = "./pathology_prediction/data/csv/debug/test_pathologies.csv"
+def get_confusion_matrix (c1, c2, n_clusters) :
+    confusion_mat = np.zeros((n_clusters, n_clusters))
 
-# input_train = "./pathology_prediction/data/csv/challenge/mono_class/train_URTI_mono.csv"
-# input_test = "./pathology_prediction/data/csv/challenge/mono_class/test_URTI_mono.csv"
+    for class_num in range(n_clusters) :
+        for i in range(len(c1)):
+            classed = c1[i]
 
-input_train = "./pathology_prediction/data/csv/challenge/mono_class_selective/vs_healthy/train_brcts_mono.csv"
-input_test = "./pathology_prediction/data/csv/challenge/mono_class_selective/vs_healthy/test_brcts_mono.csv"
+    for i in range(n_clusters) :
+        c_i = set([index for index, value in enumerate(c1) if value == i])
+        for j in range(n_clusters) :
+            c_j = set([index for index, value in enumerate(c2) if value == j])
+
+            confusion_mat[i, j] =len(c_i.intersection(c_j))
+
+    return confusion_mat
+
+input_train = "./pathology_prediction/data/csv/record_level/train_pathologies.csv"
+input_test = "./pathology_prediction/data/csv/record_level/test_pathologies.csv"
 
 with open(input_train) as f1:
     line1 = f1.readline()
@@ -39,38 +49,34 @@ train_dataset = np.loadtxt(input_train, delimiter=",", skiprows = 1, usecols=ran
 test_dataset = np.loadtxt(input_test, delimiter=",", skiprows = 1, usecols=range(1,nbcols_test))
 print("Parsing data")
 pathologies_train = train_dataset[:,0:1]
-classification_train = train_dataset[:,1:2]
-features_train = train_dataset[:,2:]
+features_train = train_dataset[:,1:]
 
 pathologies_test = test_dataset[:,0:1]
-classification_test = test_dataset[:,1:2]
-features_test = test_dataset[:,2:]
+features_test = test_dataset[:,1:]
 print("Numpy arrays ready")
 ######################################################################################################
 print("Preparing data for DMatrix")
 print("Preparing train data")
 train_dataset = pd.read_csv(input_train)
-# print(train_dataset)
 pathologies_T = train_dataset.pathologie
+filenames_T = train_dataset.filename
 # print(pathologies_T)
 del train_dataset['filename']
-del train_dataset['classification']
 features_T = train_dataset.drop(['pathologie'],axis=1)
 # print(features_T)
 print("Train data ready")
 print("Preparing test data")
 test_dataset = pd.read_csv(input_test)
 pathologies_t = test_dataset.pathologie
+filenames_t = test_dataset.filename
 # print(pathologies_t)
 del test_dataset['filename']
-del test_dataset['classification']
 features_t = test_dataset.drop(['pathologie'],axis=1)
 # print(features_t)
 print("Test data ready")
 print("Converting data to DMatrix")
 nb_lines = len(test_dataset)
-negatives = 0
-positives = 0
+asthma = LRTI = pneumonia = bronchioectasis = bronchiolitis = URTI = COPD = healthy = total = 0
 ratios = 1
 train = xgb.DMatrix(features_T,label=pathologies_T)
 test = xgb.DMatrix(features_t,label=pathologies_t)
@@ -80,21 +86,63 @@ print("Computing the ratios for balanced training")
 print("Parsing train data")
 for i in range(0,len(pathologies_train)):
     if(pathologies_train[i] == 0):
-        negatives += 1
+        asthma += 1
+        total += 1
     if(pathologies_train[i] == 1):
-        positives += 1
+        LRTI += 1
+        total += 1
+    if(pathologies_train[i] == 2):
+        pneumonia += 1
+        total += 1
+    if(pathologies_train[i] == 3):
+        bronchioectasis += 1
+        total += 1
+    if(pathologies_train[i] == 4):
+        bronchiolitis += 1
+        total += 1
+    if(pathologies_train[i] == 5):
+        URTI += 1
+        total += 1
+    if(pathologies_train[i] == 6):
+        COPD += 1
+        total += 1
+    if(pathologies_train[i] == 7):
+        healthy += 1
+        total += 1
+print(asthma)
+print(LRTI)
+print(pneumonia)
+print(bronchioectasis)
+print(bronchiolitis)
+print(URTI)
+print(COPD)
+print(healthy)
+print(total)
 print("Compute the ratios")
-if(positives == 0):
-    ratios = 0
-else :
-    ratios = negatives / positives
+if(asthma == 0) : ratio_asthma = 0
+else : ratio_asthma = (total-asthma) / asthma
+ratio_LRTI = (total-LRTI) / LRTI
+ratio_pneumonia = (total-pneumonia) / pneumonia
+ratio_bronchioectasis = (total-bronchioectasis) / bronchioectasis
+ratio_bronchiolitis = (total-bronchiolitis) / bronchioectasis
+ratio_URTI = (total-URTI) / URTI
+ratio_COPD = (total-COPD) / COPD
+ratio_healthy = (total-healthy) / healthy
+
+ratios = [ratio_asthma,ratio_LRTI,ratio_pneumonia,ratio_bronchioectasis,ratio_bronchiolitis,ratio_URTI,ratio_COPD,ratio_healthy]
 print("Ratios are computed :")
 print(ratios)
 print("#################")
 
+
+# model = xgb.XGBClassifier(base_score=0.5, booster='gbtree', colsample_bylevel=1,
+#        learning_rate=0.1, max_delta_step=0,
+#     , n_estimators=100,
+#        reg_alpha=0, reg_lambda=1, scale_pos_weight=ratios, seed=None,class_num=8,
+#        silent=True, subsample=1)
 params = {
     'booster': 'gbtree',
-    'objective': 'multi:softmax',
+    'objective': 'multi:softprob',
     'num_class': 8,
     'gamma': 0,
     'max_depth': 3,
@@ -119,11 +167,8 @@ evals_result = {}
 model = xgb.train(params, train, num_round, watchlist, evals_result=evals_result)
 print("Model trained")
 print()
-# print(model.feature_importances_)
-# print(model)
 xgb.plot_importance(model,max_num_features = 25)
 from matplotlib import pyplot
-# xgb.plot_tree(model)
 pyplot.show()
 print()
 ###################################################################################
@@ -133,23 +178,19 @@ y_pred = model.predict(test)
 labels = test.get_label()
 print("Model Predicted")
 print("Step 3 : Extract predictions")
-# predictions = [round(value) for value in y_pred]
-print("Predictions Extracted")
-print('error=%f' % (sum(1 for i in range(len(y_pred)) if int(y_pred[i] > 0.5) != labels[i]) / float(len(y_pred))))
-print(evals_result)
-# TODO pred proba, fonction native pour le faire ??
-print("***********")
-test_eval= pathologies_test.flatten()
-print(len(y_pred))
-print(len(test_eval))
-print(type(y_pred))
+print(y_pred.shape)
 print(y_pred)
-print(type(test_eval))
-print(test_eval)
-print("***********")
-# confusion = get_confusion_matrix(test_eval,y_pred,8)
-confusion1 = sklm.confusion_matrix(pathologies_test,y_pred)
-print(len(confusion1))
-print(confusion1)
-# best_preds = np.asarray([np.argmax(line) for line in y_pred])
-# confusion2 = sklm.confusion_matrix(pathologies_test,best_preds)
+
+output_directory = './pathology_prediction/data/results/'
+output_file = 'results_records_proba.csv'
+output = output_directory + output_file
+out_file = open(output, "w")
+out_file.write("file,asthma,LRTI,pneumonia,bronchioectasis,bronchiolitis,URTI,COPD,healthy\n")
+for i in range(len(y_pred)):
+    out_file.write(filenames_t[i]+",")
+    for j in range(0,8):
+        out_file.write(str(y_pred[i][j])+",")
+    # print("writing csv file")
+    out_file.write(str(pathologies_t[i]+1))
+    out_file.write("\n")
+print('file write ok')
