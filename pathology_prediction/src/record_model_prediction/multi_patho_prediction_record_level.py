@@ -107,6 +107,8 @@ for i in range(0,len(pathologies_train)):
     if(pathologies_train[i] == 7):
         healthy += 1
         total += 1
+print("TRAIN")
+print("*****")
 print(asthma)
 print(LRTI)
 print(pneumonia)
@@ -116,6 +118,47 @@ print(URTI)
 print(COPD)
 print(healthy)
 print(total)
+print("*****")
+# ///////////////////////////////////////
+asthma2 = LRTI2 = pneumonia2 = bronchioectasis2 = bronchiolitis2 = URTI2 = COPD2 = healthy2 = total2 = 0
+for i in range(0,len(pathologies_test)):
+    if(pathologies_test[i] == 0):
+        asthma2 += 1
+        total2 += 1
+    if(pathologies_test[i] == 1):
+        LRTI2 += 1
+        total2 += 1
+    if(pathologies_test[i] == 2):
+        pneumonia2 += 1
+        total2 += 1
+    if(pathologies_test[i] == 3):
+        bronchioectasis2 += 1
+        total2 += 1
+    if(pathologies_test[i] == 4):
+        bronchiolitis2 += 1
+        total2 += 1
+    if(pathologies_test[i] == 5):
+        URTI2 += 1
+        total2 += 1
+    if(pathologies_test[i] == 6):
+        COPD2 += 1
+        total2 += 1
+    if(pathologies_test[i] == 7):
+        healthy2 += 1
+        total2 += 1
+print("TEST")
+print("*****")
+print(asthma2)
+print(LRTI2)
+print(pneumonia2)
+print(bronchioectasis2)
+print(bronchiolitis2)
+print(URTI2)
+print(COPD2)
+print(healthy2)
+print(total2)
+print("*****")
+
 print("Compute the ratios")
 if(asthma == 0) : ratio_asthma = 0
 else : ratio_asthma = (total-asthma) / asthma
